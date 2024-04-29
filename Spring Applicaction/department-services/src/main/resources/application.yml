@@ -1,0 +1,33 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: DEPARTMENT-SERVICES
+
+
+management:
+  health:
+    circuit breakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      userService:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+  retry:
+    instances:
+      DEPARTMENT_SERVICE:
+        maxRetryAttempts: 3
+        withDuration: 5s

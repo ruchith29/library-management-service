@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+management:
+  health:
+    circuit breakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      userService:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+  retry:
+    instances:
+      userService:
+        maxRetryAttempts: 5
+        waitDuration: 5s
