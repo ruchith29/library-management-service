@@ -32,13 +32,14 @@ public class DepartmentController {
 
     @GetMapping("/{id}")
     public DepartmentEntity findUserById(@PathVariable("id") int dep_id){
-        return departmentRepository.findById(dep_id);
+        return departmentRepository.findById(dep_id).orElseThrow(RuntimeException::new);
     }
 
     @GetMapping("/ed/{id}")
     public DataObjects increaseSalary(@PathVariable("id") int dep_id) {
-        DepartmentEntity departmentEntity = departmentRepository.findById(dep_id);
-        Employee employee = restTemplate.getForObject("http://localhost:7000/employee/" + departmentEntity.getDep_id(dep_id), Employee.class);
+        DepartmentEntity departmentEntity = departmentRepository.findById(dep_id).orElseThrow(RuntimeException::new);
+        Employee employee = restTemplate.getForObject("http://localhost:7000/employee/"
+                + departmentEntity.getDep_id(dep_id), Employee.class);
         DataObjects o=new DataObjects();
         o.setDepartmentEntity(departmentEntity);
         o.setEmployee(employee);
@@ -47,7 +48,8 @@ public class DepartmentController {
         if (o.getEmployee().getDate_of_join()<2015 && o.getDepartmentEntity().getDep_name().equals("Development")){
             updatedSalary+= (currentSalary/10);
             o.getDepartmentEntity().setSalary(updatedSalary);
-            o.getString("The Salary of employee Is Increased by 10%... i.e from "+currentSalary+" to "+ updatedSalary +"Congratulations "+o.getEmployee().getName()+" !!");
+            o.getString("The Salary of employee Is Increased by 10%... i.e from "
+                    +currentSalary+" to "+ updatedSalary +"Congratulations "+o.getEmployee().getName()+" !!");
         }
         departmentEntity.setSalary(updatedSalary);
         departmentRepository.save(departmentEntity);

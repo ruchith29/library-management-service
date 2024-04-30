@@ -3,20 +3,15 @@ package com.assignment.department.service.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Data
-@Setter
-@Getter
 public class DepartmentEntity {
 
     @Id
     private int dep_id;
     private String dep_name;
     private int salary;
-
 
     public String getDep_name() {
         return dep_name;
